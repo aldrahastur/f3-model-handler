@@ -6,8 +6,10 @@
  * Time: 15:33
  */
 
+namespace F3ModelHandler;
 
 use DB\SQL\Mapper;
+
 
 class AbstractModels
 {
