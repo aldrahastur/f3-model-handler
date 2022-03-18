@@ -1,0 +1,22 @@
+{
+  "name": "aldrahastur/f3-model-handler",
+  "description": "handle models in fat-free framework",
+  "type": "libary",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Willi Helwig",
+      "email": "willi.helwig@tivents.de"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": "^7.2 || ^8.0",
+    "bcosca/fatfree": "^3.8"
+  },
+  "autoload": {
+    "psr-0": {
+      "F3ModelHandler": "src/"
+    }
+  }
+}
