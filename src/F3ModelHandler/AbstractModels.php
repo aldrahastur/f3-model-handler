@@ -94,36 +94,6 @@ class AbstractModels
         return $entities->paginate($page, $limit, $filter);
     }
 
-
-    public function paginateEntitiesWithOptions($f3, $table, $options = null)
-    {
-        if (isset($options['fields'])) {
-            $entities = $this->getSqlTable($table, $options['fields']);
-        } else {
-            $entities = $this->getSqlTable($table);
-        }
-
-        $page = $f3->exists('GET.page') ? $f3->get('GET.page') : 0;
-        $limit = $f3->exists('GET.limit') ? $f3->get('GET.limit') : 15;
-
-        $sort = null;
-        $filter = null;
-
-        if($options != null) {
-            if (isset($options['sort'])) {
-                $sort = $options['sort'];
-            }
-            if (isset($options['filter'])) {
-                $filter = $options['filter'];
-            }
-        }
-
-        return $entities->paginate($page, $limit, $filter, $sort);
-
-
-    }
-
-
     function apiPaginate($table, $options = null) {
         $entities = $this->paginateEntitiesWithOptions($this->f3, $table, $options);
 
@@ -154,7 +124,7 @@ class AbstractModels
         return $entity->insert();
     }
 
-    function updateEntity($f3, $table, $index, $id, $putdata, $user = null){
+    function updateEntity($table, $index, $id, $putdata, $user = null){
         $entity = $this->getSqlTable($table);
         $entity->load(array(
             $index.' LIKE :id',
@@ -172,7 +142,13 @@ class AbstractModels
         return $entity->update();
     }
 
-    function deleteEntity($f3){
+    function deleteEntity($table, $index, $id){
+        $entity = $this->getSqlTable($table);
+        $entity->load(array(
+            $index.' LIKE :id',
+            ':id' => $id
+        ));
 
+        return $entity->erase();
     }
 }
