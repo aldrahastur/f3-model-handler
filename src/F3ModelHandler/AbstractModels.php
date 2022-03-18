@@ -23,10 +23,10 @@ class AbstractModels
 
     function getSqlTable($table, $fields = null){
         if ($fields != null) {
-            return new DB\SQL\Mapper(Registry::get('db'),$table, $fields);
+            return new \DB\SQL\Mapper(\Registry::get('db'),$table, $fields);
         }
         else {
-            return new DB\SQL\Mapper(Registry::get('db'),$table);
+            return new \DB\SQL\Mapper(\Registry::get('db'),$table);
         }
 
     }
@@ -106,11 +106,20 @@ class AbstractModels
         $page = $f3->exists('GET.page') ? $f3->get('GET.page') : 0;
         $limit = $f3->exists('GET.limit') ? $f3->get('GET.limit') : 15;
 
-        if (isset($options['sort'])) {
-            return $entities->paginate($page, $limit, $options['filter'], $options['sort']);
-        } else {
-            return $entities->paginate($page, $limit, $options['filter']);
+        $sort = null;
+        $filter = null;
+
+        if($options != null) {
+            if (isset($options['sort'])) {
+                $sort = $options['sort'];
+            }
+            if (isset($options['filter'])) {
+                $filter = $options['filter'];
+            }
         }
+
+        return $entities->paginate($page, $limit, $filter, $sort);
+
 
     }
 
@@ -151,8 +160,6 @@ class AbstractModels
             $index.' LIKE :id',
             ':id' => $id
         ));
-
-        var_dump($putdata);
 
         foreach ($putdata as $key => $value) {
 
